@@ -22,4 +22,50 @@ describe 'Merchants Api' do
     expect(response).to be_successful
     expect(merchant['data']['id']).to eq(id)
   end
+
+  it 'can find a merchant by id paramaters' do
+    id = create(:merchant).id
+
+    get "/api/v1/merchants/find?id=#{id}"
+
+    merchant = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(merchant["data"]["attributes"]["id"]).to eq(id)
+  end
+
+  it 'can find a merchant by name paramaters' do
+    name = create(:merchant).name
+
+    get "/api/v1/merchants/find?name=#{name}"
+
+    merchant = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(merchant["data"]["attributes"]["name"]).to eq(name)
+  end
+
+  it 'can find a merchant by created_at paramaters' do
+    date = "2012-03-27 14:56:04 UTC"
+    create(:merchant, created_at: date)
+
+    get "/api/v1/merchants/find?created_at=#{date}"
+
+    merchant = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(merchant["data"]["attributes"]["created_at"]).to eq("2012-03-27T14:56:04.000Z")
+  end
+
+  it 'can find a merchant by updated_at paramaters' do
+    date = "2012-03-27 14:56:04 UTC"
+    create(:merchant, updated_at: date)
+
+    get "/api/v1/merchants/find?updated_at=#{date}"
+
+    merchant = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(merchant["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
+  end
 end
