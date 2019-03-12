@@ -88,4 +88,15 @@ describe 'Merchants Api' do
     merchants = JSON.parse(response.body)
     expect(merchants["data"].count).to eq(3)
   end
+
+  it 'can return a random resource' do
+    one = create(:merchant).id
+    two = create(:merchant).id
+    three = create(:merchant).id
+
+    get "/api/v1/merchants/random"
+    merchant = JSON.parse(response.body)
+
+    expect(merchant["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
+  end
 end
