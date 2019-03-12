@@ -68,4 +68,24 @@ describe 'Merchants Api' do
     expect(response).to be_successful
     expect(merchant["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
   end
+
+  it 'can find all merchants with matching search' do
+    date = "2012-03-27 14:56:04 UTC"
+    create(:merchant, name: 'merchant', created_at: date, updated_at: date)
+    create(:merchant, name: 'merchant', created_at: date, updated_at: date)
+    create(:merchant, name: 'merchant', created_at: date, updated_at: date)
+    create(:merchant)
+
+    get "/api/v1/merchants/find_all?name=merchant"
+    merchants = JSON.parse(response.body)
+    expect(merchants["data"].count).to eq(3)
+
+    get "/api/v1/merchants/find_all?created_at=#{date}"
+    merchants = JSON.parse(response.body)
+    expect(merchants["data"].count).to eq(3)
+
+    get "/api/v1/merchants/find_all?updated_at=#{date}"
+    merchants = JSON.parse(response.body)
+    expect(merchants["data"].count).to eq(3)
+  end
 end
