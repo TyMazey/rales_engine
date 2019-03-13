@@ -19,13 +19,23 @@ describe 'Merchants Api' do
     transaction_4 = create(:transaction, invoice: invoice_4)
     invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 2)
     invoice_item_2 = create(:invoice_item, item: item_2, invoice: invoice_2)
-    invoice_item_3 = create(:invoice_item, item: item_3, invoice: invoice_3)
+    invoice_item_3 = create(:invoice_item, item: item_3, invoice: invoice_3, quantity: 2)
     invoice_item_4 = create(:invoice_item, item: item_3, invoice: invoice_4, unit_price: 4)
   end
 
   it 'can return a top merchants by revenue' do
 
     get "/api/v1/merchants/most_revenue?quantity=2"
+    merchants = JSON.parse(response.body)
+
+    expect(merchants["data"].count).to eq(2)
+    expect(merchants["data"][0]["attributes"]["id"]).to eq(@merch_three.id)
+    expect(merchants["data"][1]["attributes"]["id"]).to eq(@merch_one.id)
+  end
+
+  it 'can return a top merchants by revenue' do
+
+    get "/api/v1/merchants/most_items?quantity=2"
     merchants = JSON.parse(response.body)
 
     expect(merchants["data"].count).to eq(2)

@@ -24,13 +24,21 @@ RSpec.describe Merchant, type: :model do
       transaction_4 = create(:transaction, invoice: invoice_4)
       invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 2)
       invoice_item_2 = create(:invoice_item, item: item_2, invoice: invoice_2)
-      invoice_item_3 = create(:invoice_item, item: item_3, invoice: invoice_3)
+      invoice_item_3 = create(:invoice_item, item: item_3, invoice: invoice_3, quantity: 2)
       invoice_item_4 = create(:invoice_item, item: item_3, invoice: invoice_4, unit_price: 4)
     end
 
     describe 'most_revenue' do
       it 'returns merchants with the highest revenue' do
         result = Merchant.most_revenue(2)
+
+        expect(result).to eq([@merch_three, @merch_one])
+      end
+    end
+
+    describe 'most_items' do
+      it 'returns merchants with the highest revenue' do
+        result = Merchant.most_items(2)
 
         expect(result).to eq([@merch_three, @merch_one])
       end
