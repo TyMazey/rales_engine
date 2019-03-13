@@ -3,6 +3,6 @@ FactoryBot.define do
     item_id { nil }
     invoice_id { nil }
     quantity { 1 }
-    unit_price { 1.5 }
+    sequence(:unit_price) { |n| n + 1 }
   end
 end
