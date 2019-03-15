@@ -34,7 +34,7 @@ RSpec.describe Transaction, type: :model do
         result = Transaction.revenue_for_date(@date_1)
 
         expect(result.unscoped.first.created_at).to eq(@date_1)
-        expect(result[0].total_revenue).to eq(31)
+        expect(result[0].total_revenue).to eq(37)
       end
     end
   end

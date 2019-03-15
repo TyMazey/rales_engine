@@ -68,5 +68,12 @@ RSpec.describe Merchant, type: :model do
         expect(result[0].revenue).to eq(16)
       end
     end
+    describe 'total_revenue_for_date' do
+      it 'returns the total revenue for that merchant by date' do
+        result = @merch_one.total_revenue_for_date(@date_1)
+
+        expect(result[0].revenue).to eq(20)
+      end
+    end
   end
 end

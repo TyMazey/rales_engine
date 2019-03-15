@@ -34,4 +34,11 @@ class Merchant < ApplicationRecord
     .where(transactions: {result: 1})
     .group(:merchant_id)
   end
+
+  def total_revenue_for_date(date)
+    invoices.select("sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
+    .joins(:invoice_items, :transactions)
+    .where(transactions: {result: 1, created_at: date})
+    .group(:merchant_id)
+  end
 end
