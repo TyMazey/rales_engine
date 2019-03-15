@@ -46,4 +46,27 @@ RSpec.describe Merchant, type: :model do
       end
     end
   end
+
+  describe 'instance methods' do
+    before(:each) do
+      @date_1 = "2012-03-27 14:56:04 UTC"
+      date_2 = "2012-04-27 14:56:04 UTC"
+      customer = create(:customer)
+      @merch_one = create(:merchant)
+      item_1 = create(:item, merchant: @merch_one)
+      invoice_1 = create(:invoice, customer: customer, merchant: @merch_one)
+      transaction_1 = create(:transaction, invoice: invoice_1, created_at: @date_1)
+      invoice_2 = create(:invoice, customer: customer, merchant: @merch_one)
+      transaction_2 = create(:transaction, invoice: invoice_2, created_at: @date_1, result: 0)
+      invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 2)
+      invoice_item_2 = create(:invoice_item, item: item_1, invoice: invoice_2)
+    end
+    describe 'total_revenue' do
+      it 'returns the total revenue for that merchant' do
+        result = @merch_one.total_revenue
+
+        expect(result[0].revenue).to eq(16)
+      end
+    end
+  end
 end

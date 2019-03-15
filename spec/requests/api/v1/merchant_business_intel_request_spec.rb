@@ -49,7 +49,16 @@ describe 'Merchants Api' do
 
     get "/api/v1/merchants/revenue?date=#{@date_1}"
     json = JSON.parse(response.body)
-    expected = {"total_revenue" => 52}
+    expected = {"total_revenue" => 58}
+
+    expect(json["data"]["attributes"]).to eq(expected)
+  end
+
+  it 'can return a total revenue for a date' do
+
+    get "/api/v1/merchants/#{@merch_one.id}/revenue"
+    json = JSON.parse(response.body)
+    expected = {"revenue" => 44}
 
     expect(json["data"]["attributes"]).to eq(expected)
   end
