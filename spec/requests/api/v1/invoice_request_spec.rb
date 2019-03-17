@@ -69,6 +69,19 @@ describe 'invoices API ' do
     expect(json["data"]["attributes"]["merchant_id"]).to eq(merch)
   end
 
+  it 'can find a invoice by status paramaters' do
+    cust = create(:customer).id
+    merch = create(:merchant).id
+    id = create(:invoice, merchant_id: merch, customer_id: cust).id
+
+    get "/api/v1/invoices/find?status=shipped"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json["data"]["attributes"]["status"]).to eq("shipped")
+  end
+
   it 'can find a invoice by created_at paramaters' do
     date = "2012-03-27 14:56:04 UTC"
     cust = create(:customer).id
@@ -95,5 +108,49 @@ describe 'invoices API ' do
 
     expect(response).to be_successful
     expect(json["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
+  end
+
+  it 'can find all invoices by matching paramaters' do
+    date = "2012-03-27 14:56:04 UTC"
+    cust = create(:customer).id
+    cust_2 = create(:customer).id
+    merch = create(:merchant).id
+    merch_2 = create(:merchant).id
+    create(:invoice, merchant_id: merch, customer_id: cust, updated_at: date, created_at: date)
+    create(:invoice, merchant_id: merch, customer_id: cust, updated_at: date, created_at: date)
+    create(:invoice, merchant_id: merch, customer_id: cust, updated_at: date, created_at: date)
+    create(:invoice, merchant_id: merch_2, customer_id: cust_2, status: 0)
+
+    get "/api/v1/invoices/find_all?merchant_id=#{merch}"
+    json = JSON.parse(response.body)
+    expect(json["data"].count).to eq(3)
+
+    get "/api/v1/invoices/find_all?customer_id=#{cust}"
+    json = JSON.parse(response.body)
+    expect(json["data"].count).to eq(3)
+
+    get "/api/v1/invoices/find_all?status=shipped"
+    json = JSON.parse(response.body)
+    expect(json["data"].count).to eq(3)
+
+    get "/api/v1/invoices/find_all?created_at=#{date}"
+    json = JSON.parse(response.body)
+    expect(json["data"].count).to eq(3)
+
+    get "/api/v1/invoices/find_all?updated_at=#{date}"
+    json = JSON.parse(response.body)
+    expect(json["data"].count).to eq(3)
+  end
+
+  it 'can find all invoices by matching paramaters' do
+    cust = create(:customer).id
+    merch = create(:merchant).id
+    one = create(:invoice, merchant_id: merch, customer_id: cust).id
+    two = create(:invoice, merchant_id: merch, customer_id: cust).id
+    three = create(:invoice, merchant_id: merch, customer_id: cust).id
+
+    get "/api/v1/invoices/random"
+    json = JSON.parse(response.body)
+    expect(json["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
   end
 end
