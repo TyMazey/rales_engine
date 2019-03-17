@@ -13,7 +13,7 @@ describe 'items API ' do
     expect(invoices["data"].count).to eq(3)
   end
 
-  it 'can get a single invoice item by its id' do
+  it 'can get a single item by its id' do
     merch = create(:merchant).id
     id = create(:item, merchant_id: merch).id.to_s
 
