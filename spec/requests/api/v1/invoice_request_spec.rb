@@ -166,11 +166,11 @@ describe 'invoices API ' do
     json = JSON.parse(response.body)
     expect(json["data"]["relationships"]["transactions"]["data"].count).to eq(1)
 
-    get "/api/v1/invoices/#{invoice}/customers"
+    get "/api/v1/invoices/#{invoice}/customer"
     json = JSON.parse(response.body)
     expect(json["data"]["relationships"]["customer"]["data"]["id"]).to eq(cust)
 
-    get "/api/v1/invoices/#{invoice}/merchants"
+    get "/api/v1/invoices/#{invoice}/merchant"
     json = JSON.parse(response.body)
     expect(json["data"]["relationships"]["merchant"]["data"]["id"]).to eq(merch)
 

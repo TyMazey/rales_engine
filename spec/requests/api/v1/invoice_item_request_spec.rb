@@ -129,4 +129,20 @@ describe 'invoice items API ' do
     json = JSON.parse(response.body)
     expect(json["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
   end
+
+  it 'can return relationships for invoice items' do
+    cust = create(:customer).id
+    merch = create(:merchant).id
+    item = create(:item, merchant_id: merch).id.to_s
+    invo = create(:invoice, merchant_id: merch, customer_id: cust).id.to_s
+    id = create(:invoice_item, item_id: item, invoice_id: invo, quantity: 10, unit_price: 10).id
+
+    get "/api/v1/invoice_items/#{id}/invoice"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["invoice"]["data"]["id"]).to eq(invo)
+
+    get "/api/v1/invoice_items/#{id}/item"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["item"]["data"]["id"]).to eq(item)
+  end
 end
