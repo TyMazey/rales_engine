@@ -35,6 +35,7 @@ group :development, :test do
   gem 'faker'
   gem 'fast_jsonapi'
   gem 'database_cleaner'
+  gem 'simplecov'
 end
 
 group :development do
