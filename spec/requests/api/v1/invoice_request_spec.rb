@@ -153,4 +153,33 @@ describe 'invoices API ' do
     json = JSON.parse(response.body)
     expect(json["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
   end
+
+  it 'can return relationships for an invoice' do
+    cust = create(:customer).id.to_s
+    merch = create(:merchant).id.to_s
+    invoice = create(:invoice, merchant_id: merch, customer_id: cust).id
+    create(:transaction, invoice_id: invoice)
+    item = create(:item, merchant_id: merch).id
+    create(:invoice_item, invoice_id: invoice, item_id: item)
+
+    get "/api/v1/invoices/#{invoice}/transactions"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["transactions"]["data"].count).to eq(1)
+
+    get "/api/v1/invoices/#{invoice}/customers"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["customer"]["data"]["id"]).to eq(cust)
+
+    get "/api/v1/invoices/#{invoice}/merchants"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["merchant"]["data"]["id"]).to eq(merch)
+
+    get "/api/v1/invoices/#{invoice}/invoice_items"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["invoice_items"]["data"].count).to eq(1)
+
+    get "/api/v1/invoices/#{invoice}/items"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["items"]["data"].count).to eq(1)
+  end
 end
