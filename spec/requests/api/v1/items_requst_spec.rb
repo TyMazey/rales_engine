@@ -100,7 +100,7 @@ describe 'items API ' do
     expect(json["data"].count).to eq(3)
   end
 
-  it 'can find all items by attributes as paramaters' do
+  it 'can find random item' do
     merch = create(:merchant).id
     one = create(:item, name: "name", description: "descript", unit_price: 10, merchant_id: merch).id
     two =create(:item, name: "name", description: "descript", unit_price: 10, merchant_id: merch).id
@@ -109,5 +109,22 @@ describe 'items API ' do
     get "/api/v1/items/random"
     json = JSON.parse(response.body)
     expect(json["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
+  end
+
+  it 'can return relationships for items' do
+    merch = create(:merchant).id.to_s
+    cust = create(:customer).id
+    id = create(:item, name: "name", description: "descript", unit_price: 10, merchant_id: merch).id
+    invo = create(:invoice, merchant_id: merch, customer_id: cust).id.to_s
+    invo_item = create(:invoice_item, item_id: id, invoice_id: invo)
+
+
+    get "/api/v1/items/#{id}/invoice_items"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["invoice_items"]["data"].count).to eq(1)
+
+    get "/api/v1/items/#{id}/merchant"
+    json = JSON.parse(response.body)
+    expect(json["data"]["relationships"]["merchant"]["data"]["id"]).to eq(merch)
   end
 end

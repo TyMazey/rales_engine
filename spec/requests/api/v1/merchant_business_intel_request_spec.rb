@@ -51,7 +51,7 @@ describe 'Merchants Api' do
 
     get "/api/v1/merchants/revenue?date=#{@date_1}"
     json = JSON.parse(response.body)
-    expected = {"total_revenue" => 88}
+    expected = {"total_revenue" => 91}
 
     expect(json["data"]["attributes"]).to eq(expected)
   end
@@ -60,7 +60,7 @@ describe 'Merchants Api' do
 
     get "/api/v1/merchants/#{@merch_one.id}/revenue"
     json = JSON.parse(response.body)
-    expected = {"revenue" => 64}
+    expected = {"revenue" => 66}
 
     expect(json["data"]["attributes"]).to eq(expected)
   end
@@ -69,7 +69,7 @@ describe 'Merchants Api' do
 
     get "/api/v1/merchants/#{@merch_one.id}/revenue?date=#{@date_1}"
     json = JSON.parse(response.body)
-    expected = {"revenue" => 70}
+    expected = {"revenue" => 72}
 
     expect(json["data"]["attributes"]).to eq(expected)
   end
