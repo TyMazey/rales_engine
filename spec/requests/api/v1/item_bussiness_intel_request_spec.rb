@@ -36,4 +36,14 @@ describe 'Merchants Api' do
     expect(json["data"][0]["attributes"]["id"]).to eq(@item_3.id)
     expect(json["data"][1]["attributes"]["id"]).to eq(@item_1.id)
   end
+
+  it 'can return top items by amount sold' do
+
+    get "/api/v1/items/most_items?quantity=2"
+    json = JSON.parse(response.body)
+
+    expect(json["data"].count).to eq(2)
+    expect(json["data"][0]["attributes"]["id"]).to eq(@item_3.id)
+    expect(json["data"][1]["attributes"]["id"]).to eq(@item_1.id)
+  end
 end
