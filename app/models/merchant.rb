@@ -23,8 +23,37 @@ class Merchant < ApplicationRecord
 
   def self.revenue_for_date(date)
     select("transactions.created_at AS date, sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue")
-    .joins(invoices: [:invoice_items, :transactions])
+    .joins(:invoice_items, :transactions)
     .where(transactions: {result: 1, created_at: date})
     .group("transactions.created_at")
+  end
+
+  def self.favorite_customer(merch_id, limit = 1)
+    Customer.select("customers.*, count(customers.id)")
+    .joins(invoices: :transactions)
+    .where(invoices: {merchant_id: merch_id}, transactions: {result: 1})
+    .group(:id)
+    .order("count DESC")
+    .limit(limit)
+  end
+
+  def self.customers_with_pending_invoices
+    Customer.select("customers.*")
+    .joins(invoices: :transactions)
+    .where(invoices: {merchant_id: merch_id}, transactions: {result: 0})
+  end
+
+  def total_revenue
+    invoices.select("sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
+    .joins(:invoice_items, :transactions)
+    .where(transactions: {result: 1})
+    .group(:merchant_id)
+  end
+
+  def total_revenue_for_date(date)
+    invoices.select("sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
+    .joins(:invoice_items, :transactions)
+    .where(transactions: {result: 1, created_at: date})
+    .group(:merchant_id)
   end
 end

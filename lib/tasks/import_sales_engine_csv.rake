@@ -40,7 +40,7 @@ namespace :import_sales_engine_csv do
     csv_text = File.read('data/transactions.csv')
     csv = CSV.parse(csv_text, :headers => true)
     csv.each do |row|
-      InvoiceItem.create!(row.to_hash)
+      Transaction.create!(row.to_hash)
     end
     puts "Imports Transactions"
   end

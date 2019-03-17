@@ -5,6 +5,10 @@ class Api::V1::Merchants::RevenueController < ApplicationController
   end
 
   def show
-    render json: MerchantSerializer.new(Merchant.revenue_for_date(params[:date]))
+    merchant = Merchant.find(params[:id])
+    render json: RevenueSerializer.new(merchant.total_revenue[0]) unless params["date"]
+    if params["date"]
+      render json: RevenueSerializer.new(merchant.total_revenue_for_date(params["date"])[0])
+    end
   end
 end

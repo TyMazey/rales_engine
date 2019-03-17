@@ -99,4 +99,27 @@ describe 'Merchants Api' do
 
     expect(merchant["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
   end
+
+  it 'can return a item relationship for merchant' do
+    one = create(:merchant).id
+    create(:item, merchant_id: one)
+    create(:item, merchant_id: one)
+
+    get "/api/v1/merchants/#{one}/items"
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["relationships"]["items"]["data"].count).to eq(2)
+  end
+
+  it 'can return a invoice relationship for merchant' do
+    one = create(:merchant).id
+    cust = create(:customer).id
+    create(:invoice, merchant_id: one, customer_id: cust)
+    create(:invoice, merchant_id: one, customer_id: cust)
+
+    get "/api/v1/merchants/#{one}/invoices"
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["relationships"]["invoices"]["data"].count).to eq(2)
+  end
 end
