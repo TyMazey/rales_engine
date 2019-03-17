@@ -37,6 +37,12 @@ class Merchant < ApplicationRecord
     .limit(limit)
   end
 
+  def self.customers_with_pending_invoices
+    Customer.select("customers.*")
+    .joins(invoices: :transactions)
+    .where(invoices: {merchant_id: merch_id}, transactions: {result: 0})
+  end
+
   def total_revenue
     invoices.select("sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
     .joins(:invoice_items, :transactions)

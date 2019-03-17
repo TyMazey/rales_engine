@@ -99,4 +99,15 @@ describe 'Merchants Api' do
 
     expect(merchant["data"]["attributes"]["id"]).to eq(one).or eq(two).or eq(three)
   end
+
+  it 'can return a item relationship for merchant' do
+    one = create(:merchant).id
+    create(:item, merchant_id: one)
+    create(:item, merchant_id: one)
+
+    get "/api/v1/merchants/#{one}/items"
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["relationships"]["items"]["data"].count).to eq(2)
+  end
 end

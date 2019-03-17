@@ -19,6 +19,8 @@ describe 'Merchants Api' do
     transaction_3 = create(:transaction, invoice: invoice_3, created_at: date_2)
     invoice_4 = create(:invoice, customer: @customer, merchant: @merch_three)
     transaction_4 = create(:transaction, invoice: invoice_4, created_at: date_2)
+    invoice_5 = create(:invoice, customer: @customer, merchant: @merch_three)
+    transaction_5 = create(:transaction, invoice: invoice_4, created_at: date_2, result: 0)
     invoice_item_1 = create(:invoice_item, item: item_1, invoice: invoice_1, quantity: 2)
     invoice_item_2 = create(:invoice_item, item: item_2, invoice: invoice_2)
     invoice_item_3 = create(:invoice_item, item: item_3, invoice: invoice_3, quantity: 2)
@@ -72,7 +74,7 @@ describe 'Merchants Api' do
     expect(json["data"]["attributes"]).to eq(expected)
   end
 
-  it 'can return a merchants revenue for a date' do
+  it 'can return a merchants favorite customer' do
 
     get "/api/v1/merchants/#{@merch_one.id}/favorite_customer"
     json = JSON.parse(response.body)
