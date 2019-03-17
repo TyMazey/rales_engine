@@ -17,7 +17,7 @@ describe 'invoices API ' do
     expect(invoices["data"].count).to eq(3)
   end
 
-  it 'can get a single merchant by its id' do
+  it 'can get a single invoice by its id' do
     cust = create(:customer).id
     merch = create(:merchant).id
     id = create(:invoice, merchant_id: merch, customer_id: cust).id.to_s
@@ -142,7 +142,7 @@ describe 'invoices API ' do
     expect(json["data"].count).to eq(3)
   end
 
-  it 'can find all invoices by matching paramaters' do
+  it 'can return random' do
     cust = create(:customer).id
     merch = create(:merchant).id
     one = create(:invoice, merchant_id: merch, customer_id: cust).id
