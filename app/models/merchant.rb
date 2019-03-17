@@ -28,6 +28,15 @@ class Merchant < ApplicationRecord
     .group("transactions.created_at")
   end
 
+  def self.favorite_customer(merch_id, limit = 1)
+    Customer.select("customers.*, count(customers.id)")
+    .joins(invoices: :transactions)
+    .where(invoices: {merchant_id: merch_id}, transactions: {result: 1})
+    .group(:id)
+    .order("count DESC")
+    .limit(limit)
+  end
+
   def total_revenue
     invoices.select("sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
     .joins(:invoice_items, :transactions)

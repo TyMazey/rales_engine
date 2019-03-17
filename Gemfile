@@ -34,6 +34,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'faker'
   gem 'fast_jsonapi'
+  gem 'database_cleaner'
 end
 
 group :development do
