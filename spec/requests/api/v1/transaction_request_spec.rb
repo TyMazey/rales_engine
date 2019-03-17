@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 describe 'items API ' do
 
   it 'sends a list of transactions' do
