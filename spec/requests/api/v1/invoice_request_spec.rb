@@ -93,7 +93,7 @@ describe 'invoices API ' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["created_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["id"]).to eq(id)
   end
 
   it 'can find a invoice by created_at paramaters' do
@@ -107,7 +107,7 @@ describe 'invoices API ' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["id"]).to eq(id)
   end
 
   it 'can find all invoices by matching paramaters' do
@@ -164,22 +164,22 @@ describe 'invoices API ' do
 
     get "/api/v1/invoices/#{invoice}/transactions"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["transactions"]["data"].count).to eq(1)
+    expect(json["data"].count).to eq(1)
 
     get "/api/v1/invoices/#{invoice}/customer"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["customer"]["data"]["id"]).to eq(cust)
+    expect(json["data"]["id"]).to eq(cust)
 
     get "/api/v1/invoices/#{invoice}/merchant"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["merchant"]["data"]["id"]).to eq(merch)
+    expect(json["data"]["id"]).to eq(merch)
 
     get "/api/v1/invoices/#{invoice}/invoice_items"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["invoice_items"]["data"].count).to eq(1)
+    expect(json["data"].count).to eq(1)
 
     get "/api/v1/invoices/#{invoice}/items"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["items"]["data"].count).to eq(1)
+    expect(json["data"].count).to eq(1)
   end
 end

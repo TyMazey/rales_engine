@@ -41,11 +41,11 @@ describe 'items API ' do
 
     get "/api/v1/customers/find?created_at=#{date}"
     json = JSON.parse(response.body)
-    expect(json['data']["attributes"]['created_at']).to eq("2012-03-27T14:56:04.000Z")
+    expect(json['data']["attributes"]['id']).to eq(id)
 
     get "/api/v1/customers/find?updated_at=#{date}"
     json = JSON.parse(response.body)
-    expect(json['data']["attributes"]['updated_at']).to eq("2012-03-27T14:56:04.000Z")
+    expect(json['data']["attributes"]['id']).to eq(id)
   end
 
   it 'can find all customers by attributes as params' do
@@ -92,10 +92,10 @@ describe 'items API ' do
 
     get "/api/v1/customers/#{id}/invoices"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["invoices"]["data"].count).to eq(1)
+    expect(json["data"].count).to eq(1)
 
     get "/api/v1/customers/#{id}/transactions"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["transactions"]["data"].count).to eq(1)
+    expect(json["data"].count).to eq(1)
   end
 end

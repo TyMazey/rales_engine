@@ -52,7 +52,7 @@ RSpec.describe Item, type: :model do
 
         result = Item.best_day(@item_3)[0]
 
-        expect(result.best_day.to_s).to eq(@date_2)
+        expect(result.best_day.to_s).to eq(@date_1)
       end
     end
   end

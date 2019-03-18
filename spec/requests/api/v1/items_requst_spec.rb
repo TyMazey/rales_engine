@@ -48,7 +48,7 @@ describe 'items API ' do
     get "/api/v1/items/find?unit_price=10"
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["unit_price"]).to eq(10)
+    expect(json["data"]["attributes"]["unit_price"]).to eq("0.10")
 
     get "/api/v1/items/find?merchant_id=#{merch}"
     json = JSON.parse(response.body)
@@ -58,12 +58,12 @@ describe 'items API ' do
     get "/api/v1/items/find?created_at=#{date}"
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["created_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["id"]).to eq(id)
 
     get "/api/v1/items/find?updated_at=#{date}"
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["id"]).to eq(id)
   end
 
   it 'can find all items by attributes as paramaters' do
@@ -121,10 +121,10 @@ describe 'items API ' do
 
     get "/api/v1/items/#{id}/invoice_items"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["invoice_items"]["data"].count).to eq(1)
+    expect(json["data"].count).to eq(1)
 
     get "/api/v1/items/#{id}/merchant"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["merchant"]["data"]["id"]).to eq(merch)
+    expect(json["data"]["id"]).to eq(merch)
   end
 end

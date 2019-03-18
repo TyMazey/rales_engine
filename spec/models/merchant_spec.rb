@@ -59,7 +59,8 @@ RSpec.describe Merchant, type: :model do
 
   describe 'instance methods' do
     before(:each) do
-      @date_1 = "2012-03-27 14:56:04 UTC"
+      @date_1 = "2012-03-27 00:00:00 UTC"
+      @date = "2012-03-27"
       date_2 = "2012-04-27 14:56:04 UTC"
       customer = create(:customer)
       @merch_one = create(:merchant)
@@ -80,7 +81,7 @@ RSpec.describe Merchant, type: :model do
     end
     describe 'total_revenue_for_date' do
       it 'returns the total revenue for that merchant by date' do
-        result = @merch_one.total_revenue_for_date(@date_1)
+        result = @merch_one.total_revenue_for_date(@date)
 
         expect(result[0].revenue).to eq(50)
       end

@@ -65,17 +65,17 @@ describe 'invoice items API ' do
     get "/api/v1/invoice_items/find?unit_price=10"
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["unit_price"]).to eq(10)
+    expect(json["data"]["attributes"]["id"]).to eq(id)
 
     get "/api/v1/invoice_items/find?created_at=#{date}"
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["created_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["id"]).to eq(id)
 
     get "/api/v1/invoice_items/find?updated_at=#{date}"
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["id"]).to eq("#{id}")
   end
 
   it 'can find all invoice items by attributes as paramaters' do
@@ -139,10 +139,10 @@ describe 'invoice items API ' do
 
     get "/api/v1/invoice_items/#{id}/invoice"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["invoice"]["data"]["id"]).to eq(invo)
+    expect(json["data"]["id"]).to eq(invo)
 
     get "/api/v1/invoice_items/#{id}/item"
     json = JSON.parse(response.body)
-    expect(json["data"]["relationships"]["item"]["data"]["id"]).to eq(item)
+    expect(json["data"]["id"]).to eq(item)
   end
 end

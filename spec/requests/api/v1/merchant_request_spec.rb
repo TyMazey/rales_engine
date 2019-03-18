@@ -47,26 +47,26 @@ describe 'Merchants Api' do
 
   it 'can find a merchant by created_at paramaters' do
     date = "2012-03-27 14:56:04 UTC"
-    create(:merchant, created_at: date)
+    id = create(:merchant, created_at: date).id
 
     get "/api/v1/merchants/find?created_at=#{date}"
 
     merchant = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(merchant["data"]["attributes"]["created_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(merchant["data"]["attributes"]["id"]).to eq(id)
   end
 
   it 'can find a merchant by updated_at paramaters' do
     date = "2012-03-27 14:56:04 UTC"
-    create(:merchant, updated_at: date)
+    id = create(:merchant, updated_at: date).id
 
     get "/api/v1/merchants/find?updated_at=#{date}"
 
     merchant = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(merchant["data"]["attributes"]["updated_at"]).to eq("2012-03-27T14:56:04.000Z")
+    expect(merchant["data"]["attributes"]["id"]).to eq(id)
   end
 
   it 'can find all merchants with matching search' do
@@ -108,7 +108,7 @@ describe 'Merchants Api' do
     get "/api/v1/merchants/#{one}/items"
     json = JSON.parse(response.body)
 
-    expect(json["data"]["relationships"]["items"]["data"].count).to eq(2)
+    expect(json["data"].count).to eq(2)
   end
 
   it 'can return a invoice relationship for merchant' do
@@ -120,6 +120,6 @@ describe 'Merchants Api' do
     get "/api/v1/merchants/#{one}/invoices"
     json = JSON.parse(response.body)
 
-    expect(json["data"]["relationships"]["invoices"]["data"].count).to eq(2)
+    expect(json["data"].count).to eq(2)
   end
 end

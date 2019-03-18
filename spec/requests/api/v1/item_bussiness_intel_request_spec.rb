@@ -52,6 +52,6 @@ describe 'Merchants Api' do
     get "/api/v1/items/#{@item_3.id}/best_day"
     json = JSON.parse(response.body)
 
-    expect(json["data"]["attributes"]["best_day"]).to eq("2012-04-27T14:56:04.000Z")
+    expect(json["data"]["attributes"]["best_day"]).to eq("2012-03-27")
   end
 end
