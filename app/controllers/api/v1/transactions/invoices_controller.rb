@@ -1,6 +1,6 @@
 class Api::V1::Transactions::InvoicesController < ApplicationController
 
   def show
-    render json: TransactionInvoiceSerializer.new(Transaction.find(params[:id]))
+    render json: InvoiceSerializer.new(Transaction.find(params[:id]).invoice)
   end
 end

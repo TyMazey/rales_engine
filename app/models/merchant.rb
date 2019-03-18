@@ -22,10 +22,10 @@ class Merchant < ApplicationRecord
   end
 
   def self.revenue_for_date(date)
-    select("transactions.created_at AS date, sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue")
+    Invoice.select("date_trunc('day', invoices.created_at) AS date, sum(invoice_items.quantity * invoice_items.unit_price) AS total_revenue")
     .joins(:invoice_items, :transactions)
-    .where(transactions: {result: 1, created_at: date})
-    .group("transactions.created_at")
+    .where(transactions: {result: 1}, invoices: {created_at: Time.parse(date).utc.all_day})
+    .group("date")
   end
 
   def self.favorite_customer(merch_id, limit = 1)
@@ -53,7 +53,7 @@ class Merchant < ApplicationRecord
   def total_revenue_for_date(date)
     invoices.select("sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
     .joins(:invoice_items, :transactions)
-    .where(transactions: {result: 1, created_at: date})
+    .where(transactions: {result: 1}, invoices: {created_at: Time.parse(date).utc.all_day})
     .group(:merchant_id)
   end
 end

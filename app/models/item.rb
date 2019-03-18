@@ -22,11 +22,11 @@ class Item < ApplicationRecord
   end
 
   def self.best_day(id, limit = 1)
-    Invoice.select("invoices.created_at AS best_day, sum(invoice_items.quantity * invoice_items.unit_price) AS revenue")
+    Invoice.select("invoices.created_at AS best_day, sum(invoice_items.quantity) AS revenue")
     .joins(:transactions, :invoice_items)
     .where(invoice_items: {item_id: id}, transactions: {result: 1})
     .group(:created_at)
-    .order("revenue")
+    .order("revenue DESC, best_day DESC")
     .limit(limit)
   end
 end
